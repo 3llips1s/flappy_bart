@@ -1,20 +1,25 @@
 import 'dart:async';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flappy_bart/game/logic/flappy_bart_game.dart';
 
-import '../constants/constants.dart';
+import '../../../../core/constants/constants.dart';
+import '../../logic/flappy_bart_game.dart';
 
-class Ground extends SpriteComponent with HasGameReference<FlappyBartGame> {
+class Ground extends SpriteComponent
+    with HasGameReference<FlappyBartGame>, CollisionCallbacks {
   Ground() : super();
 
-  // load
   @override
   FutureOr<void> onLoad() async {
     size = Vector2(2 * game.size.x, groundHeight);
     position = Vector2(0, game.size.y - groundHeight);
 
+    // load image
     sprite = await Sprite.load('ground.png');
+
+    // collision box
+    add(RectangleHitbox());
   }
 
   // move ground to the left

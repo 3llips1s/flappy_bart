@@ -1,20 +1,29 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_fullscreen/flutter_fullscreen.dart';
 
-import 'game/logic/flappy_bart_game.dart';
+import 'features/game/logic/flappy_bart_game.dart';
+import 'features/nouns/data/csv_loader.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await CsvLoader.loadNouns();
+
+  // await FullScreen.ensureInitialized();
+
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.edgeToEdge,
+    overlays: [SystemUiOverlay.bottom],
+  );
+
   SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
+    const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
     ),
   );
-  await FullScreen.ensureInitialized();
 
   runApp(const MainApp());
 }
