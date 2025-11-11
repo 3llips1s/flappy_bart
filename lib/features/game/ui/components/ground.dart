@@ -25,9 +25,11 @@ class Ground extends SpriteComponent
   // move ground to the left
   @override
   void update(double dt) {
+    if (!game.gameStarted) return;
+
     position.x -= groundScrollingSpeed * dt;
 
-    // infinite scroll - reset ground if it half has been passed
+    // infinite scroll - reset ground if half has been passed
     if (position.x + size.x / 2 <= 0) {
       position.x = 0;
     }

@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 class PipeGapLabel extends TextComponent {
   final String article;
   final bool isCorrectAnswer;
-  final double gapStartY;
+  final double gapCenterY;
 
   PipeGapLabel({
     required this.article,
     required this.isCorrectAnswer,
-    required this.gapStartY,
+    required this.gapCenterY,
   }) : super(
          text: article,
          textRenderer: TextPaint(
@@ -20,12 +20,16 @@ class PipeGapLabel extends TextComponent {
              color: Colors.grey.shade300,
              fontSize: 20,
              fontWeight: FontWeight.bold,
+             shadows: [
+               Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 4),
+             ],
            ),
          ),
        );
 
   @override
   FutureOr<void> onLoad() async {
-    position = Vector2(15, gapStartY - 30);
+    anchor = Anchor.center;
+    position = Vector2(30, gapCenterY);
   }
 }

@@ -27,7 +27,7 @@ class Score extends TextComponent with HasGameReference<FlappyBartGame> {
 
   @override
   void update(double dt) {
-    final newScoreText = game.score.toString();
+    final newScoreText = game.gameState.score.toString();
     if (text != newScoreText) {
       text = newScoreText;
     }

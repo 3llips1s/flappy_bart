@@ -6,34 +6,71 @@ import 'package:flame/components.dart';
 import '../../../../core/constants/constants.dart';
 import '../../logic/flappy_bart_game.dart';
 import 'ground.dart';
-import 'pipe.dart';
+import 'pipe_segment.dart';
 
-class Bird extends SpriteComponent with CollisionCallbacks {
+class Bird extends SpriteComponent
+    with CollisionCallbacks, HasGameReference<FlappyBartGame> {
   // initial bird position + size
   Bird()
-    : super(
-        position: Vector2(birdStartX, birdStartY),
-        size: Vector2(birdWidth, birdHeight),
-      );
+    : super(position: Vector2.zero(), size: Vector2(birdWidth, birdHeight));
 
   double velocity = 0;
+
+  // animation properties
+  double targetX = 0;
+  double startX = 0;
+  bool isMovingToStartPosition = false;
+  double moveTimer = 0;
+  final double moveDuration = 2;
 
   // load bird
   @override
   FutureOr<void> onLoad() async {
     sprite = await Sprite.load('bird.png');
 
-    add(CircleHitbox(radius: 15));
+    add(
+      CircleHitbox(radius: 8, position: Vector2(birdWidth / 2, birdHeight / 2)),
+    );
+
+    startX = game.size.x / 2;
+    targetX = game.size.x / 8;
+
+    position = Vector2(startX, (game.size.y - groundHeight) / 2);
   }
 
   // jump
   void flap() {
     velocity = jumpStrength;
+
+    if (!game.gameStarted) {
+      game.startGame();
+
+      isMovingToStartPosition = true;
+      moveTimer = 0;
+    }
   }
 
   // update per sec.
   @override
   void update(double dt) {
+    if (isMovingToStartPosition) {
+      moveTimer += dt;
+
+      double progress = (moveTimer / moveDuration).clamp(0.0, 1.0);
+      double easedProgress =
+          1 - (1 - progress) * (1 - progress) * (1 - progress);
+
+      position.x = startX + (targetX - startX) * easedProgress;
+
+      if (moveTimer >= moveDuration) {
+        isMovingToStartPosition = false;
+        position.x = targetX;
+      }
+    }
+
+    // apply physics after game starts
+    if (!game.gameStarted) return;
+
     // apply gravity
     velocity += gravity * dt;
 
@@ -46,8 +83,17 @@ class Bird extends SpriteComponent with CollisionCallbacks {
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
 
-    if (other is Ground || other is Pipe) {
+    if (other is Ground || other is PipeSegment) {
       (parent as FlappyBartGame).gameOver();
     }
+  }
+
+  void resetPosition() {
+    startX = game.size.x / 2;
+    position.x = startX;
+    position.y = (game.size.y - groundHeight) / 2;
+    velocity = 0;
+    isMovingToStartPosition = false;
+    moveTimer = 0;
   }
 }
