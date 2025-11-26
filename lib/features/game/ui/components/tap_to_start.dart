@@ -27,6 +27,7 @@ class TapToStart extends TextComponent with HasGameReference<FlappyBartGame> {
   void update(double dt) {
     position = Vector2(game.size.x / 2, (game.size.y - groundHeight) / 2 + 60);
 
+    // pulse animation
     pulseTimer += dt;
     final pulse = 1.0 + sin(pulseTimer * 3) * 0.1;
     scale = Vector2.all(pulse);
@@ -34,6 +35,7 @@ class TapToStart extends TextComponent with HasGameReference<FlappyBartGame> {
 
   @override
   void render(Canvas canvas) {
+    // render only if game hasn't started
     if (!game.gameStarted) {
       super.render(canvas);
     }

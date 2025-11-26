@@ -6,6 +6,7 @@ import 'package:flame/components.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/models/german_noun.dart';
 import '../../logic/flappy_bart_game.dart';
+import 'gap_sparkle.dart';
 import 'noun_label.dart';
 import 'pipe_gap_label.dart';
 import 'pipe_segment.dart';
@@ -121,8 +122,23 @@ class PipePair extends PositionComponent with HasGameReference<FlappyBartGame> {
             isTopGapCorrect ? topGapStartY : bottomGapStartY;
         final correctGapEnd = isTopGapCorrect ? topGapEndY : bottomGapEndY;
 
-        if (birdCenterY > correctGapStart + 10 &&
+        if (birdCenterY >= correctGapStart + 10 &&
             birdCenterY <= correctGapEnd - 10) {
+          if (isTopGapCorrect) {
+            topGapLabel.triggerFlash();
+          } else {
+            bottomGapLabel.triggerFlash();
+          }
+
+          // sparkles
+          final sparklePosition = Vector2(
+            position.x + pipeWidth / 2,
+            isTopGapCorrect
+                ? (topGapStartY + topGapEndY) / 2
+                : (bottomGapStartY + bottomGapEndY) / 2,
+          );
+          game.add(GapSparkle(gapCenter: sparklePosition));
+
           game.onCorrectGap();
         } else {
           game.gameOver();

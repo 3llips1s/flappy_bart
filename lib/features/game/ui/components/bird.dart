@@ -33,7 +33,7 @@ class Bird extends SpriteComponent
     );
 
     startX = game.size.x / 2;
-    targetX = game.size.x / 8;
+    targetX = game.size.x / 4;
 
     position = Vector2(startX, (game.size.y - groundHeight) / 2);
   }
