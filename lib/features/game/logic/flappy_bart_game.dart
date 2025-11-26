@@ -12,9 +12,10 @@ import '../../nouns/logic/noun_selector.dart';
 import '../ui/components/background.dart';
 import '../ui/components/bird.dart';
 import '../ui/components/ground.dart';
-import '../ui/components/pipe.dart';
 import '../ui/components/pipe_manager.dart';
+import '../ui/components/pipe_pair.dart';
 import '../ui/components/score.dart';
+import '../ui/components/tap_to_start.dart';
 import 'game_state.dart';
 
 class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
@@ -28,7 +29,9 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
   late GameState gameState;
   late List<GermanNoun> allNouns;
 
-  bool isGameOver = false;
+  bool gameStarted = false;
+
+  // double targetY = 0;
 
   @override
   FutureOr<void> onLoad() async {
@@ -51,7 +54,35 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
     scoreText = Score();
     add(scoreText);
 
+    final tapToStartText = TapToStart();
+    add(tapToStartText);
+
     _selectNextNoun();
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    // follow bird vertically
+    if (gameStarted && !gameState.isGameOver) {
+      final halfScreenHeight = size.y / 2;
+      final availableHeight = size.y - groundHeight;
+
+      final targetY = (bird.position.y - halfScreenHeight).clamp(
+        // don't shift past top
+        0.0,
+        // don't go below ground
+        availableHeight - size.y,
+      );
+
+      // smooth lerp to target
+      final currentY = camera.viewport.position.y;
+      camera.viewport.position.y =
+          currentY + (targetY - currentY) * cameraFollowSpeed * dt;
+    } else {
+      camera.viewport.position.y = 0;
+    }
   }
 
   @override
@@ -59,10 +90,8 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
     bird.flap();
   }
 
-  int score = 0;
-
-  void incrementScore() {
-    score++;
+  void startGame() {
+    gameStarted = true;
   }
 
   void _selectNextNoun() {
@@ -72,21 +101,29 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
       correctArticle: selection.correctArticle,
       incorrectArticle: selection.incorrectArticle,
     );
+
+    print(
+      'Selected word: ${selection.noun.noun}, article: ${selection.correctArticle}',
+    );
+    print('GameState currentNoun: ${gameState.currentNoun?.noun}');
   }
 
-  void onGapSelected(bool isCorrect) {
-    if (isCorrect) {
-      gameState.incrementScore();
-      _selectNextNoun();
-    } else {
-      IncorrectNounsTracker.addIncorrectNoun(gameState.currentNoun!);
-      gameOver();
-    }
+  void onCorrectGap() {
+    gameState.incrementScore();
+    _selectNextNoun();
+    print(
+      'Score: ${gameState.score}, New word: ${gameState.currentNoun?.noun}',
+    );
   }
 
-  void gameOver() {
+  void gameOver() async {
     if (gameState.isGameOver) return;
     gameState.gameOver();
+
+    if (gameState.currentNoun != null) {
+      await IncorrectNounsTracker.addIncorrectNoun(gameState.currentNoun!);
+    }
+
     pauseEngine();
 
     // game over dialog
@@ -95,7 +132,23 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
       builder:
           (context) => AlertDialog(
             title: const Text('Spiel vorbei'),
-            content: Text('Deine Punkte: ${score.toString()}'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Deine Punkte: ${gameState.score}'),
+                const SizedBox(height: 16),
+                if (gameState.currentNoun != null) ...[
+                  Text(
+                    'Richtige Antwort:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    '${gameState.correctArticle} ${gameState.currentNoun!.noun}',
+                    style: TextStyle(fontSize: 18, color: Colors.green),
+                  ),
+                ],
+              ],
+            ),
             actions: [
               TextButton(
                 onPressed: () {
@@ -110,11 +163,13 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
   }
 
   void resetGame() {
-    bird.position = Vector2(birdStartX, birdStartY);
-    bird.velocity = 0;
-    score = 0;
-    isGameOver = false;
-    children.whereType<Pipe>().forEach((pipe) => pipe.removeFromParent());
+    bird.resetPosition();
+    gameState.reset();
+    nounSelector.reset();
+    children.whereType<PipePair>().forEach((pipe) => pipe.removeFromParent());
+    _selectNextNoun();
+    gameStarted = false;
+    camera.viewport.position.y = 0;
     resumeEngine();
   }
 }

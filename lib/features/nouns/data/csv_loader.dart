@@ -17,7 +17,9 @@ class CsvLoader {
       return _parseNounsFromJson(cachedJson);
     }
 
-    final csvData = await rootBundle.loadString('assets/data/german_nouns.csv');
+    final csvData = await rootBundle.loadString(
+      'assets/data/flappy_bart_nouns.csv',
+    );
     final List<List<dynamic>> rows = const CsvToListConverter().convert(
       csvData,
       shouldParseNumbers: false,

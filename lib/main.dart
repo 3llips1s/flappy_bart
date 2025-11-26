@@ -1,6 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_fullscreen/flutter_fullscreen.dart';
 
 import 'features/game/logic/flappy_bart_game.dart';
 import 'features/nouns/data/csv_loader.dart';
@@ -10,12 +11,7 @@ void main() async {
 
   await CsvLoader.loadNouns();
 
-  // await FullScreen.ensureInitialized();
-
-  SystemChrome.setEnabledSystemUIMode(
-    SystemUiMode.edgeToEdge,
-    overlays: [SystemUiOverlay.bottom],
-  );
+  await FullScreen.ensureInitialized();
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
