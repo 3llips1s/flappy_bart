@@ -18,23 +18,27 @@ class NounLabel extends TextComponent {
       text: noun.noun,
       textRenderer: TextPaint(
         style: const TextStyle(
-          color: Colors.white,
+          color: Color(0XFF1C4D8D),
           fontSize: 28,
           fontWeight: FontWeight.bold,
         ),
       ),
-      anchor: Anchor.centerRight,
+      anchor: Anchor.topRight,
       position: Vector2(0, 0),
     );
     add(nounText);
 
     translationText = TextComponent(
-      text: noun.english,
+      text: '- ${noun.english}',
       textRenderer: TextPaint(
-        style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 18),
+        style: TextStyle(
+          color: Color(0XFF34495E).withOpacity(0.7),
+          fontStyle: FontStyle.italic,
+          fontSize: 14,
+        ),
       ),
-      anchor: Anchor.centerRight,
-      position: Vector2(0, 24),
+      anchor: Anchor.topRight,
+      position: Vector2(0, 40),
     );
     add(translationText);
   }

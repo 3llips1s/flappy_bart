@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -21,7 +22,13 @@ class Bird extends SpriteComponent
   double startX = 0;
   bool isMovingToStartPosition = false;
   double moveTimer = 0;
-  final double moveDuration = 2;
+  final double moveDuration = 1;
+
+  // hover properties
+  double hoverTimer = 0;
+  final double hoverAmplitude = 8;
+  final double hoverSpeed = 0.5;
+  double baseY = 0;
 
   // load bird
   @override
@@ -32,10 +39,12 @@ class Bird extends SpriteComponent
       CircleHitbox(radius: 8, position: Vector2(birdWidth / 2, birdHeight / 2)),
     );
 
-    startX = game.size.x / 2;
+    startX = game.size.x / 2.35;
     targetX = game.size.x / 4;
 
-    position = Vector2(startX, (game.size.y - groundHeight) / 2);
+    baseY = (game.size.y - groundHeight) / 3;
+
+    position = Vector2(startX, baseY);
   }
 
   // jump
@@ -53,6 +62,13 @@ class Bird extends SpriteComponent
   // update per sec.
   @override
   void update(double dt) {
+    if (!game.gameStarted && !isMovingToStartPosition) {
+      hoverTimer += dt;
+      final offset = sin(hoverTimer * hoverSpeed * 2 * pi) * hoverAmplitude;
+      position.y = baseY + offset;
+      return;
+    }
+
     if (isMovingToStartPosition) {
       moveTimer += dt;
 
@@ -76,6 +92,11 @@ class Bird extends SpriteComponent
 
     // update position based on velocity
     position.y += velocity * dt;
+
+    if (position.y < 0) {
+      position.y = 0;
+      velocity = 0;
+    }
   }
 
   // collision
@@ -89,11 +110,13 @@ class Bird extends SpriteComponent
   }
 
   void resetPosition() {
-    startX = game.size.x / 2;
+    startX = game.size.x / 2.25;
     position.x = startX;
-    position.y = (game.size.y - groundHeight) / 2;
+    position.y = baseY;
     velocity = 0;
     isMovingToStartPosition = false;
     moveTimer = 0;
+    moveTimer = 0;
+    hoverTimer = 0;
   }
 }

@@ -10,11 +10,18 @@ import '../../logic/flappy_bart_game.dart';
 class TapToStart extends TextComponent with HasGameReference<FlappyBartGame> {
   double pulseTimer = 0;
 
+  final double pulseSpeed = 0.5;
+  final double pulseAmplitude = 0.05;
+
   TapToStart()
     : super(
-        text: 'Zum Start tappen',
+        text: 'zum Start tappen',
         textRenderer: TextPaint(
-          style: const TextStyle(color: Colors.white70, fontSize: 20),
+          style: TextStyle(
+            color: Color(0XFF1C4D8D),
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+          ),
         ),
       );
 
@@ -25,11 +32,11 @@ class TapToStart extends TextComponent with HasGameReference<FlappyBartGame> {
 
   @override
   void update(double dt) {
-    position = Vector2(game.size.x / 2, (game.size.y - groundHeight) / 2 + 60);
+    position = Vector2(game.size.x / 2, (game.size.y - groundHeight) - 40);
 
     // pulse animation
     pulseTimer += dt;
-    final pulse = 1.0 + sin(pulseTimer * 3) * 0.1;
+    final pulse = 1.0 + sin(pulseTimer * pulseSpeed * 2 * pi) * pulseAmplitude;
     scale = Vector2.all(pulse);
   }
 

@@ -50,8 +50,8 @@ class PipePair extends PositionComponent with HasGameReference<FlappyBartGame> {
     topGapStartY = topPipeHeight;
     topGapEndY = topGapStartY + pipeGapSize;
 
-    final middlePipeStartY = topGapEndY;
-    final middlePipeEndY = middlePipeStartY + middlePipeHeight;
+    final double middlePipeStartY = topGapEndY;
+    final double middlePipeEndY = middlePipeStartY + middlePipeHeight;
 
     bottomGapStartY = middlePipeEndY;
     bottomGapEndY = bottomGapStartY + pipeGapSize;
@@ -63,7 +63,8 @@ class PipePair extends PositionComponent with HasGameReference<FlappyBartGame> {
     );
     add(topPipe);
 
-    final useTopPipeForMiddle = Random().nextBool();
+    final bool useTopPipeForMiddle = Random().nextBool();
+
     middlePipe = PipeSegment(
       position: Vector2(0, middlePipeStartY),
       size: Vector2(pipeWidth, middlePipeHeight),
@@ -96,10 +97,10 @@ class PipePair extends PositionComponent with HasGameReference<FlappyBartGame> {
     );
     add(bottomGapLabel);
 
-    final nounDistance = nounVisibilityTime * groundScrollingSpeed;
+    final nounDistance = nounVisibilityTime * groundScrollingSpeed * 0.5;
 
     nounLabel = NounLabel(noun: noun);
-    final middlePipeCenterY = middlePipeStartY + (middlePipeHeight / 2);
+    final middlePipeCenterY = middlePipeStartY + (middlePipeHeight / 2) - 24;
     nounLabel.position = Vector2(-nounDistance, middlePipeCenterY);
     add(nounLabel);
   }

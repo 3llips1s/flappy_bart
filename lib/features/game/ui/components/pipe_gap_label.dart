@@ -4,6 +4,8 @@ import 'package:flame/components.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/constants.dart';
+
 class PipeGapLabel extends TextComponent {
   final String article;
   final bool isCorrectAnswer;
@@ -23,12 +25,9 @@ class PipeGapLabel extends TextComponent {
          text: article,
          textRenderer: TextPaint(
            style: TextStyle(
-             color: Colors.grey.shade300,
+             color: Color(0XFF1C4D8D),
              fontSize: 20,
              fontWeight: FontWeight.bold,
-             shadows: [
-               Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 4),
-             ],
            ),
          ),
        );
@@ -36,7 +35,7 @@ class PipeGapLabel extends TextComponent {
   @override
   FutureOr<void> onLoad() async {
     anchor = Anchor.center;
-    position = Vector2(30, gapCenterY);
+    position = Vector2(pipeWidth / 2, gapCenterY);
     originalStyle = textRenderer as TextPaint;
   }
 

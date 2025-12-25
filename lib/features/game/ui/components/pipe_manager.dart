@@ -41,8 +41,22 @@ class PipeManager extends Component with HasGameReference<FlappyBartGame> {
     if (maxPipeSpace < minRequiredSpace) return;
 
     final double extraSpace = maxPipeSpace - minRequiredSpace;
-    final double topExtra = Random().nextDouble() * extraSpace * 0.4;
-    final double middleExtra = Random().nextDouble() * extraSpace * 0.3;
+
+    // distribute space left evenly and randomly
+    final random = Random();
+
+    double r1 = random.nextDouble();
+    double r2 = random.nextDouble();
+    double r3 = random.nextDouble();
+
+    // normalize distribution: always sum up to 1.0
+    final double total = r1 + r2 + r3;
+    r1 /= total;
+    r2 /= total;
+    r3 /= total;
+
+    final double topExtra = extraSpace * r1;
+    final double middleExtra = extraSpace * r2;
 
     final double topPipeHeight = minTopPipeHeight + topExtra;
     final double middlePipeHeight = minMiddlePipeHeight + middleExtra;
@@ -51,13 +65,17 @@ class PipeManager extends Component with HasGameReference<FlappyBartGame> {
         topPipeHeight + middlePipeHeight + totalGapSpace;
 
     print(
-      'Top: $topPipeHeight, Gap: $pipeGapSize, Middle: $middlePipeHeight, Gap: $pipeGapSize',
+      'Space distribution: Top ${(r1 * 100).toStringAsFixed(1)}%, ' +
+          'Middle ${(r2 * 100).toStringAsFixed(1)}%, ' +
+          'Bottom ${(r3 * 100).toStringAsFixed(1)}%',
     );
-    print('Bottom should start at: $bottomPipeStartY');
-    print('Available height: $availableHeight, Ground: $groundHeight');
+    print(
+      'Top: ${topPipeHeight.toStringAsFixed(1)}px, ' +
+          'Middle: ${middlePipeHeight.toStringAsFixed(1)}px, ' +
+          'Bottom starts at: ${bottomPipeStartY.toStringAsFixed(1)}px',
+    );
 
     final currentNoun = game.gameState.currentNoun;
-
     if (currentNoun == null) return;
 
     final pipePair = PipePair(
