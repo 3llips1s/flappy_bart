@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/audio/audio_manager.dart';
 import '../../../core/constants/constants.dart';
 import '../../../core/models/german_noun.dart';
 import '../../nouns/data/csv_loader.dart';
@@ -11,6 +13,7 @@ import '../../nouns/logic/incorrect_nouns_tracker.dart';
 import '../../nouns/logic/noun_selector.dart';
 import '../data/high_score_manager.dart';
 import '../ui/components/animated_article.dart';
+import '../ui/components/audio_button.dart';
 import '../ui/components/background.dart';
 import '../ui/components/bird.dart';
 import '../ui/components/game_over_dialog.dart';
@@ -33,9 +36,12 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
   late List<GermanNoun> allNouns;
 
   bool gameStarted = false;
+  bool _musicStarted = false;
 
   @override
   FutureOr<void> onLoad() async {
+    await AudioManager.initialize();
+
     allNouns = await CsvLoader.loadNouns();
     nounSelector = NounSelector(allNouns);
     gameState = GameState();
@@ -57,6 +63,14 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
 
     final tapToStartText = TapToStart();
     add(tapToStartText);
+
+    final audioButton = AudioButton();
+    add(audioButton);
+
+    if (!kIsWeb) {
+      AudioManager.startBackgroundMusic();
+      _musicStarted = true;
+    }
 
     _selectNextNoun();
   }
@@ -87,6 +101,13 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
 
   @override
   void onTap() {
+    if (kIsWeb && !_musicStarted) {
+      AudioManager.startBackgroundMusic();
+      _musicStarted = true;
+    }
+
+    AudioManager.playFlap();
+
     bird.flap();
   }
 
@@ -109,6 +130,7 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
   }
 
   void onCorrectGap() {
+    AudioManager.playCorrect();
     gameState.incrementScore();
     _selectNextNoun();
     print(
@@ -118,7 +140,9 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
 
   void gameOver() async {
     if (gameState.isGameOver) return;
+    AudioManager.playIncorrect();
     gameState.gameOver();
+    AudioManager.pauseBackgroundMusic();
 
     if (gameState.currentNoun != null) {
       await IncorrectNounsTracker.addIncorrectNoun(gameState.currentNoun!);
@@ -324,6 +348,16 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
     _selectNextNoun();
     gameStarted = false;
     camera.viewport.position.y = 0;
+
+    if (!AudioManager.isMuted) {
+      AudioManager.resumeBackgroundMusic();
+    }
     resumeEngine();
+  }
+
+  @override
+  void onRemove() {
+    AudioManager.dispose();
+    super.onRemove();
   }
 }

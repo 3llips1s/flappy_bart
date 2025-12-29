@@ -18,7 +18,7 @@ class TapToStart extends TextComponent with HasGameReference<FlappyBartGame> {
         text: 'zum Start tappen',
         textRenderer: TextPaint(
           style: TextStyle(
-            color: Color(0XFF1C4D8D),
+            color: Color(0xFF1C4D8D),
             fontSize: 14,
             fontWeight: FontWeight.w400,
           ),
