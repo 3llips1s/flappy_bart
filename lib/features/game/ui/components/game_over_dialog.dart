@@ -57,8 +57,8 @@ class GlassmorphicDialog extends StatelessWidget {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          Colors.white.withOpacity(0.25),
-                          Colors.white.withOpacity(0.05),
+                          Colors.white.withOpacity(0.35),
+                          Colors.white.withOpacity(0.15),
                         ],
                       ),
                     ),

@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -24,12 +24,14 @@ import '../ui/components/score.dart';
 import '../ui/components/tap_to_start.dart';
 import 'game_state.dart';
 
-class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
+class FlappyBartGame extends FlameGame
+    with TapCallbacks, HasCollisionDetection {
   late Bird bird;
   late Background background;
   late Ground ground;
   late PipeManager pipeManager;
   late Score scoreText;
+  late AudioButton audioButton;
 
   late NounSelector nounSelector;
   late GameState gameState;
@@ -64,7 +66,7 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
     final tapToStartText = TapToStart();
     add(tapToStartText);
 
-    final audioButton = AudioButton();
+    audioButton = AudioButton();
     add(audioButton);
 
     if (!kIsWeb) {
@@ -100,7 +102,13 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
   }
 
   @override
-  void onTap() {
+  void onTapDown(TapDownEvent event) {
+    // handle audio toggle
+    if (!gameStarted && audioButton.containsPoint(event.localPosition)) {
+      return;
+    }
+
+    // start music on first tap on web
     if (kIsWeb && !_musicStarted) {
       AudioManager.startBackgroundMusic();
       _musicStarted = true;
@@ -168,7 +176,7 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
             style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,
-              color: isNewRecord ? Color(0xFFFF9800) : Color(0xFF1A252F),
+              color: isNewRecord ? Colors.yellow : Color(0xFF1A252F),
             ),
           ),
 
@@ -195,9 +203,7 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
                           ? Icons.emoji_events_rounded
                           : Icons.star_rounded,
                       color:
-                          isNewRecord
-                              ? const Color(0xFFE67E22)
-                              : const Color(0XFF1C4D8D),
+                          isNewRecord ? Colors.yellow : const Color(0XFF1C4D8D),
 
                       size: 30,
                     ),
@@ -352,6 +358,7 @@ class FlappyBartGame extends FlameGame with TapDetector, HasCollisionDetection {
     if (!AudioManager.isMuted) {
       AudioManager.resumeBackgroundMusic();
     }
+
     resumeEngine();
   }
 

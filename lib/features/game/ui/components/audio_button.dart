@@ -19,15 +19,15 @@ class AudioButton extends TextComponent
   static final _soundOn = TextPaint(
     style: const TextStyle(
       color: _speakerColor,
-      fontSize: 24,
+      fontSize: 26,
       fontFamily: 'MaterialIcons',
     ),
   );
 
   static final _soundOff = TextPaint(
     style: TextStyle(
-      color: _speakerColor.withOpacity(0.7),
-      fontSize: 24,
+      color: _speakerColor.withOpacity(0.5),
+      fontSize: 26,
       fontFamily: 'MaterialIcons',
     ),
   );
@@ -55,7 +55,7 @@ class AudioButton extends TextComponent
   void update(double dt) {
     super.update(dt);
 
-    position = Vector2(32, (game.size.y - groundHeight) - 40);
+    position = Vector2(36, (game.size.y - groundHeight) - 40);
 
     // update icon on state change
     final currentIconString = _getIconString();
