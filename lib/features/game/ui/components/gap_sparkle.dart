@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/colors.dart';
+
 class GapSparkle extends PositionComponent {
   double lifetime = 0;
   final double maxLifetime = 0.6;
@@ -60,7 +62,7 @@ class GapSparkle extends PositionComponent {
         // glow effect
         final glowPaint =
             Paint()
-              ..color = Colors.white.withOpacity(opacity * 0.3)
+              ..color = AppColors.white.withOpacity(opacity * 0.3)
               ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
         canvas.drawCircle(Offset(particle.x, particle.y), size + 2, glowPaint);
       }

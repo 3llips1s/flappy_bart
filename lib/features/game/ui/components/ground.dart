@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
-import '../../../../core/constants/constants.dart';
-import '../../logic/flappy_bart_game.dart';
+import '../../../../core/constants/game_constants.dart';
+import '../../logic/artikel_vogel.dart';
 
 class Ground extends SpriteComponent
-    with HasGameReference<FlappyBartGame>, CollisionCallbacks {
+    with HasGameReference<ArtikelVogel>, CollisionCallbacks {
   Ground() : super();
 
   @override

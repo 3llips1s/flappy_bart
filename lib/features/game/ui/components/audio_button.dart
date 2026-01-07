@@ -7,18 +7,17 @@ import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/audio/audio_manager.dart';
-import '../../../../core/constants/constants.dart';
-import '../../logic/flappy_bart_game.dart';
+import '../../../../core/constants/colors.dart';
+import '../../../../core/constants/game_constants.dart';
+import '../../logic/artikel_vogel.dart';
 
 class AudioButton extends TextComponent
-    with TapCallbacks, HasGameReference<FlappyBartGame>, HasPaint {
+    with TapCallbacks, HasGameReference<ArtikelVogel>, HasPaint {
   AudioButton() : super(anchor: Anchor.center);
-
-  static const _speakerColor = Color(0xFF1C4D8D);
 
   static final _soundOn = TextPaint(
     style: const TextStyle(
-      color: _speakerColor,
+      color: AppColors.speakerOn,
       fontSize: 26,
       fontFamily: 'MaterialIcons',
     ),
@@ -26,7 +25,7 @@ class AudioButton extends TextComponent
 
   static final _soundOff = TextPaint(
     style: TextStyle(
-      color: _speakerColor.withOpacity(0.5),
+      color: AppColors.speakerOff,
       fontSize: 26,
       fontFamily: 'MaterialIcons',
     ),

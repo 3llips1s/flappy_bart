@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/colors.dart';
+
 class AnimatedArticle extends StatefulWidget {
   final String article;
   final Duration delay;
@@ -82,7 +84,7 @@ class _AnimatedArticleState extends State<AnimatedArticle>
         style: const TextStyle(
           fontSize: 26,
           fontWeight: FontWeight.bold,
-          color: Color(0xFF22D76E),
+          color: AppColors.accent,
         ),
       ),
     );

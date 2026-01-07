@@ -3,15 +3,15 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 
-import '../../../../core/constants/constants.dart';
+import '../../../../core/constants/game_constants.dart';
 import '../../../../core/models/german_noun.dart';
-import '../../logic/flappy_bart_game.dart';
+import '../../logic/artikel_vogel.dart';
 import 'gap_sparkle.dart';
 import 'noun_label.dart';
 import 'pipe_gap_label.dart';
 import 'pipe_segment.dart';
 
-class PipePair extends PositionComponent with HasGameReference<FlappyBartGame> {
+class PipePair extends PositionComponent with HasGameReference<ArtikelVogel> {
   final double topPipeHeight;
   final double middlePipeHeight;
   final double bottomPipeStartY;

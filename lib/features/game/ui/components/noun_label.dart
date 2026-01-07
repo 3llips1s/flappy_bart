@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/colors.dart';
 import '../../../../core/models/german_noun.dart';
 
 class NounLabel extends TextComponent {
@@ -18,7 +19,7 @@ class NounLabel extends TextComponent {
       text: noun.noun,
       textRenderer: TextPaint(
         style: const TextStyle(
-          color: Color(0XFF1C4D8D),
+          color: AppColors.primary,
           fontSize: 28,
           fontWeight: FontWeight.bold,
         ),
@@ -32,7 +33,7 @@ class NounLabel extends TextComponent {
       text: '- ${noun.english}',
       textRenderer: TextPaint(
         style: TextStyle(
-          color: Color(0XFF34495E).withOpacity(0.7),
+          color: AppColors.textTranslation,
           fontStyle: FontStyle.italic,
           fontSize: 14,
         ),

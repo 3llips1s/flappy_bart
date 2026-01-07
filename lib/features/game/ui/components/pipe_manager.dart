@@ -2,11 +2,11 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 
-import '../../../../core/constants/constants.dart';
-import '../../logic/flappy_bart_game.dart';
+import '../../../../core/constants/game_constants.dart';
+import '../../logic/artikel_vogel.dart';
 import 'pipe_pair.dart';
 
-class PipeManager extends Component with HasGameReference<FlappyBartGame> {
+class PipeManager extends Component with HasGameReference<ArtikelVogel> {
   double pipeSpawnTimer = 0;
   bool firstPipe = true;
   double firstPipeDelay = 1.5;
@@ -63,17 +63,6 @@ class PipeManager extends Component with HasGameReference<FlappyBartGame> {
 
     final double bottomPipeStartY =
         topPipeHeight + middlePipeHeight + totalGapSpace;
-
-    print(
-      'Space distribution: Top ${(r1 * 100).toStringAsFixed(1)}%, ' +
-          'Middle ${(r2 * 100).toStringAsFixed(1)}%, ' +
-          'Bottom ${(r3 * 100).toStringAsFixed(1)}%',
-    );
-    print(
-      'Top: ${topPipeHeight.toStringAsFixed(1)}px, ' +
-          'Middle: ${middlePipeHeight.toStringAsFixed(1)}px, ' +
-          'Bottom starts at: ${bottomPipeStartY.toStringAsFixed(1)}px',
-    );
 
     final currentNoun = game.gameState.currentNoun;
     if (currentNoun == null) return;

@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-import '../../logic/flappy_bart_game.dart';
+import '../../../../core/constants/colors.dart';
+import '../../logic/artikel_vogel.dart';
 
-class Score extends TextComponent with HasGameReference<FlappyBartGame> {
+class Score extends TextComponent with HasGameReference<ArtikelVogel> {
   int lastScore = 0;
   double scaleTimer = 0;
   bool isAnimating = false;
@@ -16,7 +17,7 @@ class Score extends TextComponent with HasGameReference<FlappyBartGame> {
         text: '0',
         textRenderer: TextPaint(
           style: TextStyle(
-            color: const Color.fromARGB(255, 0, 141, 5),
+            color: AppColors.score,
             fontSize: 32,
             fontWeight: FontWeight.bold,
           ),

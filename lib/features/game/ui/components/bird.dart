@@ -4,13 +4,13 @@ import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
-import '../../../../core/constants/constants.dart';
-import '../../logic/flappy_bart_game.dart';
+import '../../../../core/constants/game_constants.dart';
+import '../../logic/artikel_vogel.dart';
 import 'ground.dart';
 import 'pipe_segment.dart';
 
 class Bird extends SpriteComponent
-    with CollisionCallbacks, HasGameReference<FlappyBartGame> {
+    with CollisionCallbacks, HasGameReference<ArtikelVogel> {
   // initial bird position + size
   Bird()
     : super(position: Vector2.zero(), size: Vector2(birdWidth, birdHeight));
@@ -105,7 +105,7 @@ class Bird extends SpriteComponent
     super.onCollision(intersectionPoints, other);
 
     if (other is Ground || other is PipeSegment) {
-      (parent as FlappyBartGame).gameOver();
+      (parent as ArtikelVogel).gameOver();
     }
   }
 

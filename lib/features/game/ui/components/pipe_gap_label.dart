@@ -4,7 +4,8 @@ import 'package:flame/components.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/constants.dart';
+import '../../../../core/constants/colors.dart';
+import '../../../../core/constants/game_constants.dart';
 
 class PipeGapLabel extends TextComponent {
   final String article;
@@ -25,7 +26,7 @@ class PipeGapLabel extends TextComponent {
          text: article,
          textRenderer: TextPaint(
            style: TextStyle(
-             color: Color(0XFF1C4D8D),
+             color: AppColors.primary,
              fontSize: 20,
              fontWeight: FontWeight.bold,
            ),

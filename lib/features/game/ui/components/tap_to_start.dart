@@ -4,10 +4,11 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/constants.dart';
-import '../../logic/flappy_bart_game.dart';
+import '../../../../core/constants/colors.dart';
+import '../../../../core/constants/game_constants.dart';
+import '../../logic/artikel_vogel.dart';
 
-class TapToStart extends TextComponent with HasGameReference<FlappyBartGame> {
+class TapToStart extends TextComponent with HasGameReference<ArtikelVogel> {
   double pulseTimer = 0;
 
   final double pulseSpeed = 0.5;
@@ -18,7 +19,7 @@ class TapToStart extends TextComponent with HasGameReference<FlappyBartGame> {
         text: 'zum Start tappen',
         textRenderer: TextPaint(
           style: TextStyle(
-            color: Color(0xFF1C4D8D),
+            color: AppColors.primary,
             fontSize: 14,
             fontWeight: FontWeight.w400,
           ),

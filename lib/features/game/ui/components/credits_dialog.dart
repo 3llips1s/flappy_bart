@@ -3,6 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/constants/colors.dart';
+
 Future<void> showCreditsDialog(BuildContext context) {
   return showDialog(
     context: context,
@@ -27,7 +29,7 @@ class CreditsDialog extends StatelessWidget {
         );
       },
       child: Dialog(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         child: Container(
           width: 320,
           height: 520,
@@ -42,17 +44,14 @@ class CreditsDialog extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.2),
+                        color: AppColors.blurBorder,
                         width: 1.5,
                       ),
                       borderRadius: BorderRadius.circular(20),
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: [
-                          Colors.white.withOpacity(0.35),
-                          Colors.white.withOpacity(0.15),
-                        ],
+                        colors: [AppColors.glassTop, AppColors.glassBottom],
                       ),
                     ),
                   ),
@@ -74,7 +73,7 @@ class CreditsDialog extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF1A252F),
+                            color: AppColors.textDark,
                           ),
                         ),
                       ),
@@ -182,7 +181,7 @@ class CreditsDialog extends StatelessWidget {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20,
-          color: Color(0xFF1C4D8D),
+          color: AppColors.primary,
         ),
       ),
     );
@@ -194,7 +193,7 @@ class CreditsDialog extends StatelessWidget {
     String linkText,
     String url,
   ) {
-    final textStyle = TextStyle(fontSize: 15, color: Color(0xFF34495E));
+    final textStyle = TextStyle(fontSize: 15, color: AppColors.textLight);
 
     final linkStyle = TextStyle(
       fontSize: 15,
@@ -210,7 +209,7 @@ class CreditsDialog extends StatelessWidget {
           Text(
             '•   ',
             style: TextStyle(
-              color: Color(0xFF34495E),
+              color: AppColors.textLight,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
@@ -254,7 +253,7 @@ class CreditsDialog extends StatelessWidget {
   void _showErrorSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 3),
@@ -267,7 +266,7 @@ class CreditsDialog extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           height: kToolbarHeight,
           decoration: BoxDecoration(
-            color: Color(0xFF1A252F),
+            color: AppColors.textDark,
             borderRadius: BorderRadius.circular(9),
           ),
           child: Center(
@@ -276,7 +275,7 @@ class CreditsDialog extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: AppColors.white,
               ),
             ),
           ),
@@ -286,7 +285,7 @@ class CreditsDialog extends StatelessWidget {
   }
 }
 
-/// close button
+// close button
 class _FloatingCloseButton extends StatelessWidget {
   final VoidCallback onPressed;
 
@@ -302,19 +301,16 @@ class _FloatingCloseButton extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF1C4D8D).withOpacity(0.4),
-            Color(0xFF1C4D8D).withOpacity(0.2),
-          ],
+          colors: [AppColors.buttonGradientStart, AppColors.buttonGradientEnd],
         ),
-        border: Border.all(color: Colors.white.withOpacity(0.3), width: 1.5),
+        // border: Border.all(color: AppColors.bottomRightGradient, width: 1),
       ),
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         child: InkWell(
           onTap: onPressed,
           customBorder: const CircleBorder(),
-          child: Icon(Icons.close, color: Colors.white, size: 24),
+          child: Icon(Icons.close, color: AppColors.white, size: 24),
         ),
       ),
     );

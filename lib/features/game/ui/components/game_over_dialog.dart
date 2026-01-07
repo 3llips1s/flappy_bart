@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/colors.dart';
 import '../../../../core/models/german_noun.dart';
 import 'animated_article.dart';
 import 'glassmorphic_components.dart';
@@ -59,10 +60,10 @@ class GameOverDialog extends StatelessWidget {
               Navigator.of(context).pop();
               onRestart();
             },
-            color: const Color(0xFF1C4D8D),
+            color: AppColors.primary,
             child: const Icon(
               Icons.refresh_rounded,
-              color: Colors.white,
+              color: AppColors.white,
               size: 32,
             ),
           ),
@@ -90,7 +91,7 @@ class GameOverDialog extends StatelessWidget {
       style: TextStyle(
         fontSize: 30,
         fontWeight: FontWeight.bold,
-        color: isNewRecord ? Colors.yellow : const Color(0xFF1A252F),
+        color: isNewRecord ? AppColors.success : AppColors.textDark,
       ),
     );
   }
@@ -99,9 +100,9 @@ class GameOverDialog extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: const Color(0xFF2C3E50).withOpacity(0.1),
+        color: AppColors.scoreCard,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withOpacity(0.2), width: 1.5),
+        border: Border.all(color: AppColors.blurBorder, width: 1.5),
       ),
       child: Column(
         children: [
@@ -110,7 +111,7 @@ class GameOverDialog extends StatelessWidget {
             children: [
               Icon(
                 isNewRecord ? Icons.emoji_events_rounded : Icons.star_rounded,
-                color: isNewRecord ? Colors.yellow : const Color(0xFF1C4D8D),
+                color: isNewRecord ? AppColors.success : AppColors.primary,
                 size: 30,
               ),
               const SizedBox(width: 12),
@@ -122,7 +123,7 @@ class GameOverDialog extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w900,
-                      color: Color(0xFF1A252F),
+                      color: AppColors.textDark,
                       height: 1.0,
                     ),
                   ),
@@ -132,7 +133,7 @@ class GameOverDialog extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF34495E),
+                      color: AppColors.textLight,
                     ),
                   ),
                 ],
@@ -152,7 +153,7 @@ class GameOverDialog extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFF34495E).withOpacity(0.2),
+        color: AppColors.highScoreCard,
         borderRadius: BorderRadius.circular(9),
       ),
       child: Row(
@@ -161,12 +162,12 @@ class GameOverDialog extends StatelessWidget {
           const Icon(
             Icons.emoji_events_rounded,
             size: 14,
-            color: Colors.yellow,
+            color: AppColors.success,
           ),
           const SizedBox(width: 6),
           const Text(
             'Rekord: ',
-            style: TextStyle(fontSize: 14, color: Color(0xFF34495E)),
+            style: TextStyle(fontSize: 14, color: AppColors.textLight),
           ),
           const SizedBox(width: 4),
           Text(
@@ -174,7 +175,7 @@ class GameOverDialog extends StatelessWidget {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.yellow,
+              color: AppColors.success,
             ),
           ),
         ],
@@ -209,7 +210,7 @@ class GameOverDialog extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1C4D8D),
+                  color: AppColors.primary,
                 ),
               ),
             ],
@@ -217,10 +218,10 @@ class GameOverDialog extends StatelessWidget {
           // translation
           Text(
             '- ${currentNoun!.english}',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontStyle: FontStyle.italic,
-              color: Color(0xFF34495E),
+              color: AppColors.textTranslation,
             ),
           ),
         ],

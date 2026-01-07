@@ -6,20 +6,19 @@ import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 
-import '../../logic/flappy_bart_game.dart';
+import '../../../../core/constants/colors.dart';
+import '../../logic/artikel_vogel.dart';
 import 'credits_dialog.dart';
 
 class CreditsButton extends TextComponent
-    with TapCallbacks, HasGameReference<FlappyBartGame>, HasPaint {
+    with TapCallbacks, HasGameReference<ArtikelVogel>, HasPaint {
   CreditsButton() : super(anchor: Anchor.center);
-
-  static const _buttonColor = Color(0xFF1C4D8D);
 
   final double padding = 40.0;
 
   static final _textPaint = TextPaint(
     style: TextStyle(
-      color: _buttonColor.withOpacity(0.7),
+      color: AppColors.credits,
       fontSize: 26,
       fontFamily: 'MaterialIcons',
     ),

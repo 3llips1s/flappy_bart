@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/colors.dart';
+
 class GlassmorphicDialog extends StatelessWidget {
   final Widget child;
   final double? height;
@@ -34,7 +36,7 @@ class GlassmorphicDialog extends StatelessWidget {
         );
       },
       child: Dialog(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         child: Container(
           height: height,
           width: width ?? 320,
@@ -49,17 +51,14 @@ class GlassmorphicDialog extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.2),
+                        color: AppColors.blurBorder,
                         width: 1.5,
                       ),
                       borderRadius: borderRadius,
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: [
-                          Colors.white.withOpacity(0.35),
-                          Colors.white.withOpacity(0.15),
-                        ],
+                        colors: [AppColors.glassTop, AppColors.glassBottom],
                       ),
                     ),
                   ),
@@ -111,14 +110,14 @@ class GlassButton extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            (color ?? Colors.white).withOpacity(0.3),
-            (color ?? Colors.white).withOpacity(0.1),
+            (color ?? AppColors.white).withOpacity(0.3),
+            (color ?? AppColors.white).withOpacity(0.1),
           ],
         ),
-        border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
+        border: Border.all(color: AppColors.white.withOpacity(0.3), width: 1),
       ),
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         child: InkWell(
           onTap: onPressed,
           borderRadius: BorderRadius.circular(9),
