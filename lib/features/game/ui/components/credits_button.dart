@@ -6,27 +6,20 @@ import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/audio/audio_manager.dart';
-import '../../../../core/constants/constants.dart';
 import '../../logic/flappy_bart_game.dart';
+import 'credits_dialog.dart';
 
-class AudioButton extends TextComponent
+class CreditsButton extends TextComponent
     with TapCallbacks, HasGameReference<FlappyBartGame>, HasPaint {
-  AudioButton() : super(anchor: Anchor.center);
+  CreditsButton() : super(anchor: Anchor.center);
 
-  static const _speakerColor = Color(0xFF1C4D8D);
+  static const _buttonColor = Color(0xFF1C4D8D);
 
-  static final _soundOn = TextPaint(
-    style: const TextStyle(
-      color: _speakerColor,
-      fontSize: 26,
-      fontFamily: 'MaterialIcons',
-    ),
-  );
+  final double padding = 40.0;
 
-  static final _soundOff = TextPaint(
+  static final _textPaint = TextPaint(
     style: TextStyle(
-      color: _speakerColor.withOpacity(0.5),
+      color: _buttonColor.withOpacity(0.7),
       fontSize: 26,
       fontFamily: 'MaterialIcons',
     ),
@@ -34,9 +27,8 @@ class AudioButton extends TextComponent
 
   @override
   FutureOr<void> onLoad() async {
-    text = _getIconString();
-
-    textRenderer = AudioManager.isMuted ? _soundOff : _soundOn;
+    text = String.fromCharCode(Icons.attribution_rounded.codePoint);
+    textRenderer = _textPaint;
 
     add(
       CircleHitbox()
@@ -45,33 +37,20 @@ class AudioButton extends TextComponent
     );
   }
 
-  String _getIconString() {
-    final iconData =
-        AudioManager.isMuted ? Icons.volume_off_rounded : Icons.volume_up_sharp;
-    return String.fromCharCode(iconData.codePoint);
-  }
-
   @override
   void update(double dt) {
     super.update(dt);
 
-    position = Vector2(36, (game.size.y - groundHeight) - 40);
-
-    // update icon on state change
-    final currentIconString = _getIconString();
-    if (text != currentIconString) {
-      text = currentIconString;
-
-      textRenderer = AudioManager.isMuted ? _soundOff : _soundOn;
-    }
+    position = Vector2(game.size.x - padding, padding);
   }
 
   @override
   void onTapDown(TapDownEvent event) {
     event.handled = true;
-    AudioManager.toggleMute();
     scale = Vector2.all(0.8);
     add(OpacityEffect.to(0.5, EffectController(duration: 0.3)));
+
+    showCreditsDialog(game.buildContext!);
   }
 
   @override

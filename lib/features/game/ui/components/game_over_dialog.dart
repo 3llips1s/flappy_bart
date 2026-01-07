@@ -1,156 +1,229 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
-class GlassmorphicDialog extends StatelessWidget {
-  final Widget child;
-  final double? height;
-  final double? width;
-  final List<Widget>? actions;
-  final double blur;
-  final EdgeInsets padding;
-  final BorderRadius borderRadius;
+import '../../../../core/models/german_noun.dart';
+import 'animated_article.dart';
+import 'glassmorphic_components.dart';
 
-  const GlassmorphicDialog({
-    super.key,
-    required this.child,
-    this.height,
-    this.width,
-    this.actions,
-    this.blur = 10,
-    this.padding = const EdgeInsets.all(24),
-    this.borderRadius = const BorderRadius.all(Radius.circular(20)),
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.0, end: 1.0),
-      duration: const Duration(milliseconds: 900),
-      curve: Curves.easeOutCubic,
-      builder: (context, value, child) {
-        return Transform.translate(
-          offset: Offset(0, 60 * (1 - value)),
-          child: Opacity(opacity: value, child: child),
-        );
-      },
-      child: Dialog(
-        backgroundColor: Colors.transparent,
-        child: Container(
-          height: height,
-          width: width ?? 320,
-          decoration: BoxDecoration(borderRadius: borderRadius),
-          child: Stack(
-            children: [
-              // Blur effect
-              ClipRRect(
-                borderRadius: borderRadius,
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.2),
-                        width: 1.5,
-                      ),
-                      borderRadius: borderRadius,
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Colors.white.withOpacity(0.35),
-                          Colors.white.withOpacity(0.15),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-              // Content
-              Padding(
-                padding: padding,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    child,
-                    if (actions != null && actions!.isNotEmpty) ...[
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: actions!,
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// Helper function
-Future<T?> showGlassDialog<T>({
+Future<void> showGameOverDialog({
   required BuildContext context,
-  required Widget child,
-  double? height,
-  double? width,
-  List<Widget>? actions,
-  bool barrierDismissible = false,
+  required int score,
+  required int highScore,
+  required bool isNewRecord,
+  required GermanNoun? currentNoun,
+  required String? correctArticle,
+  required VoidCallback onRestart,
 }) {
-  return showDialog<T>(
+  return showDialog(
     context: context,
-    barrierDismissible: barrierDismissible,
+    barrierDismissible: false,
     builder:
-        (context) => GlassmorphicDialog(
-          height: height,
-          width: width,
-          actions: actions,
-          child: child,
+        (context) => GameOverDialog(
+          score: score,
+          highScore: highScore,
+          isNewRecord: isNewRecord,
+          currentNoun: currentNoun,
+          correctArticle: correctArticle,
+          onRestart: onRestart,
         ),
   );
 }
 
-// Glass button for actions
-class GlassButton extends StatelessWidget {
-  final VoidCallback onPressed;
-  final Widget child;
-  final Color? color;
+class GameOverDialog extends StatelessWidget {
+  final int score;
+  final int highScore;
+  final bool isNewRecord;
+  final GermanNoun? currentNoun;
+  final String? correctArticle;
+  final VoidCallback onRestart;
 
-  const GlassButton({
+  const GameOverDialog({
     super.key,
-    required this.onPressed,
-    required this.child,
-    this.color,
+    required this.score,
+    required this.highScore,
+    required this.isNewRecord,
+    required this.currentNoun,
+    required this.correctArticle,
+    required this.onRestart,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(9),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            (color ?? Colors.white).withOpacity(0.3),
-            (color ?? Colors.white).withOpacity(0.1),
-          ],
-        ),
-        border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onPressed,
-          borderRadius: BorderRadius.circular(9),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
-            child: child,
+    return GlassmorphicDialog(
+      width: 300,
+      height: 480,
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(top: 12.0),
+          child: GlassButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              onRestart();
+            },
+            color: const Color(0xFF1C4D8D),
+            child: const Icon(
+              Icons.refresh_rounded,
+              color: Colors.white,
+              size: 32,
+            ),
           ),
         ),
+      ],
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 8),
+          _buildTitle(),
+          const SizedBox(height: 32),
+          _buildScoreSection(),
+          if (currentNoun != null) ...[
+            const SizedBox(height: 36),
+            _buildNounSection(),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTitle() {
+    return Text(
+      isNewRecord ? 'Neuer Rekord :)' : 'Spiel vorbei :(',
+      style: TextStyle(
+        fontSize: 30,
+        fontWeight: FontWeight.bold,
+        color: isNewRecord ? Colors.yellow : const Color(0xFF1A252F),
+      ),
+    );
+  }
+
+  Widget _buildScoreSection() {
+    return Container(
+      padding: const EdgeInsets.all(32),
+      decoration: BoxDecoration(
+        color: const Color(0xFF2C3E50).withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white.withOpacity(0.2), width: 1.5),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                isNewRecord ? Icons.emoji_events_rounded : Icons.star_rounded,
+                color: isNewRecord ? Colors.yellow : const Color(0xFF1C4D8D),
+                size: 30,
+              ),
+              const SizedBox(width: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '$score',
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w900,
+                      color: Color(0xFF1A252F),
+                      height: 1.0,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    score == 1 ? 'Punkt' : 'Punkte',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF34495E),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          if (!isNewRecord && highScore > 0) ...[
+            const SizedBox(height: 20),
+            _buildHighScoreBadge(),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHighScoreBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFF34495E).withOpacity(0.2),
+        borderRadius: BorderRadius.circular(9),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.emoji_events_rounded,
+            size: 14,
+            color: Colors.yellow,
+          ),
+          const SizedBox(width: 6),
+          const Text(
+            'Rekord: ',
+            style: TextStyle(fontSize: 14, color: Color(0xFF34495E)),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            '$highScore',
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.yellow,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNounSection() {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: const Duration(milliseconds: 1500),
+      curve: Curves.easeInOut,
+      builder: (context, fadeValue, child) {
+        return Opacity(opacity: fadeValue, child: child);
+      },
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              // animated correct article
+              AnimatedArticle(
+                article: correctArticle!,
+                delay: const Duration(milliseconds: 300),
+              ),
+              const SizedBox(width: 8),
+              // noun
+              Text(
+                currentNoun!.noun,
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1C4D8D),
+                ),
+              ),
+            ],
+          ),
+          // translation
+          Text(
+            '- ${currentNoun!.english}',
+            style: const TextStyle(
+              fontSize: 16,
+              fontStyle: FontStyle.italic,
+              color: Color(0xFF34495E),
+            ),
+          ),
+        ],
       ),
     );
   }
