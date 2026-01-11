@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-import 'features/game/logic/flappy_bart_game.dart';
+import 'core/constants/colors.dart';
+import 'features/game/logic/artikel_vogel.dart';
 import 'features/nouns/data/csv_loader.dart';
 
 void main() async {
@@ -40,8 +41,8 @@ class GameScreen extends StatelessWidget {
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
-      backgroundColor: Colors.transparent,
-      body: GameWidget(game: FlappyBartGame()),
+      backgroundColor: AppColors.transparent,
+      body: GameWidget(game: ArtikelVogel()),
     );
   }
 }

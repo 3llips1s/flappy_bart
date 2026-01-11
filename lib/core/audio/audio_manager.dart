@@ -7,7 +7,7 @@ class AudioManager {
   static bool _isMuted = false;
   static bool _isMusicPlaying = false;
 
-  static const double musicVolume = 0.25;
+  static const double musicVolume = 0.15;
   static const double flapVolume = 0.30;
   static const double correctVolume = 0.7;
   static const double incorrectVolume = 0.5;

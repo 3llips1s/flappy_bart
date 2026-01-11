@@ -1,16 +1,18 @@
+import 'dart:developer' as developer;
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 // spell: words prefs
 
 class HighScoreManager {
-  static const String _highScoreKey = 'flappy_bart_high_score';
+  static const String _highScoreKey = 'artikel_vogel_high_score';
 
   static Future<int> getHighScore() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       return prefs.getInt(_highScoreKey) ?? 0;
     } catch (e) {
-      print('Error getting high score: $e');
+      developer.log('Error getting high score: $e');
       return 0;
     }
   }
@@ -27,7 +29,7 @@ class HighScoreManager {
 
       return false;
     } catch (e) {
-      print('error updating high score: $e');
+      developer.log('error updating high score: $e');
       return false;
     }
   }
@@ -42,7 +44,7 @@ class HighScoreManager {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_highScoreKey);
     } catch (e) {
-      print('error resetting high score: $e');
+      developer.log('error resetting high score: $e');
     }
   }
 }

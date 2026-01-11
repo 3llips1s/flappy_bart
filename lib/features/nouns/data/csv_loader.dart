@@ -18,7 +18,7 @@ class CsvLoader {
     }
 
     final csvData = await rootBundle.loadString(
-      'assets/data/flappy_bart_nouns.csv',
+      'assets/data/artikel_vogel_nouns.csv',
     );
     final List<List<dynamic>> rows = const CsvToListConverter().convert(
       csvData,
